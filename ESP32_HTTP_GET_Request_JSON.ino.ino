@@ -1,25 +1,14 @@
-/*
-  Rui Santos
-  Complete project details at https://RandomNerdTutorials.com/control-esp32-esp8266-gpios-from-anywhere/
-  
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files.
-  
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-*/
-
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Arduino_JSON.h>
 
-const char* ssid = "REPLACE_WITH_YOUR_SSID";
-const char* password = "REPLACE_WITH_YOUR_PASSWORD";
+const char* ssid = "your_router_ssid";
+const char* password = "router_password";
 
-//Your IP address or domain name with URL path
-const char* serverName = "http://example.com/esp-outputs-action.php?action=outputs_state&board=1";
+//in below location enter your domain address
+const char* serverName = "http://your_domain/esp-outputs-action.php?action=outputs_state&board=1";
 
-// Update interval time set to 5 seconds
+//we will set the interval 5 seconds
 const long interval = 5000;
 unsigned long previousMillis = 0;
 
@@ -35,7 +24,7 @@ void setup() {
     Serial.print(".");
   }
   Serial.println("");
-  Serial.print("Connected to WiFi network with IP Address: ");
+  Serial.print("Connected to WiFi network its IP Address: ");
   Serial.println(WiFi.localIP());
 }
 
@@ -43,13 +32,13 @@ void loop() {
   unsigned long currentMillis = millis();
   
   if(currentMillis - previousMillis >= interval) {
-     // Check WiFi connection status
+     //  connection status
     if(WiFi.status()== WL_CONNECTED ){ 
       outputsState = httpGETRequest(serverName);
       Serial.println(outputsState);
       JSONVar myObject = JSON.parse(outputsState);
   
-      // JSON.typeof(jsonVar) can be used to get the type of the var
+      // JSON.typeof(jsonVar)  used to get the type of the var
       if (JSON.typeof(myObject) == "undefined") {
         Serial.println("Parsing input failed!");
         return;
